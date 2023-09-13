@@ -1,0 +1,4 @@
+{
+	"dotnet-test-explorer.testArguments": "--settings .runsettings",
+	"dotnet-test-explorer.testProjectPath": "."
+}
