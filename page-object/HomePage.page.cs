@@ -19,6 +19,12 @@ namespace SpringBoard.Tests.Models
 
         public readonly ILocator _blogLink;
 
+        public readonly ILocator _facebookLoginButton;
+
+        public readonly ILocator _linkedlnLoginButton;
+
+        public readonly ILocator _googleLoginButton;
+
         public SpringBoardHomePage(IPage page) : base(page)
         {
             this._page = page;
@@ -29,6 +35,9 @@ namespace SpringBoard.Tests.Models
             this._errorText = this._page.GetByText("The e-mail address and/or password you specified are not correct.", new() {Exact = true});
             this._submitLoginButton = this._page.GetByRole(AriaRole.Button, new() {Name = "Login"});
             this._blogLink = this._page.Locator("p", new () {HasText = "Blog"}).First;
+            this._facebookLoginButton = this._page.Locator(".socialLoginButton.facebook");
+            this._googleLoginButton = this._page.Locator(".socialLoginButton.google");
+            this._linkedlnLoginButton = this._page.Locator(".socialLoginButton.linkedin");
         }
 
         public async Task<BlogPage> ClickBlogLink()
