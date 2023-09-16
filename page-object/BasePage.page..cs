@@ -11,9 +11,9 @@ namespace SpringBoard.Tests.Models
             this._page = page;
         }
 
-        public async Task OpenUrl()
+        public async Task OpenUrl(string url = "https://www.springboard.com")
         {
-            await this._page.GotoAsync("https://www.springboard.com/");
+            await this._page.GotoAsync(url);
         }
 
         public IPage GetPage()

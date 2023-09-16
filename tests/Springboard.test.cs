@@ -1,6 +1,9 @@
 using System.Text.RegularExpressions;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
+using PlaywrightExtraSharp;
+using PlaywrightExtraSharp.Models;
+using PlaywrightExtraSharp.Plugins.ExtraStealth;
 using SpringBoard.Tests.Models;
 
 [TestFixture]
@@ -11,8 +14,22 @@ public class SpringBoardTests: PageTest
 
     [SetUp]
     public async Task Setup()
-    {
-        springBoardPage = new SpringBoardHomePage(Page);
+    {   
+        var playwrightExtra = new PlaywrightExtra(BrowserTypeEnum.Chromium);
+
+        playwrightExtra.Install();
+
+        playwrightExtra.Use(new StealthExtraPlugin());
+
+        await playwrightExtra.LaunchAsync(new ()
+         {
+            Headless = true
+        });
+
+        var page = await playwrightExtra.NewPageAsync(null);
+
+        await page.Context.ClearCookiesAsync();
+        springBoardPage = new SpringBoardHomePage(page);
         await springBoardPage.OpenUrl();
     }
 
@@ -38,6 +55,9 @@ public class SpringBoardTests: PageTest
             Path = "tests/screenshot.png",
             FullPage = true,
         });
+        
+
+       
         await springBoardPage._loginButton.ClickAsync();
         await springBoardPage._facebookLoginButton.ClickAsync();
 
@@ -75,7 +95,7 @@ public class SpringBoardTests: PageTest
     public async Task VerifyBlogPage()
     {
         var blogPage = await springBoardPage.ClickBlogLink();
-        
+
         await Expect(blogPage._emailTextBox).ToBeVisibleAsync();
         await Expect(blogPage._suscribeButton).ToBeVisibleAsync();
     }
